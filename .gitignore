@@ -36,6 +36,7 @@ fls
 *.lof
 *.lot
 *-blx.bib
+*.*-SAVE-ERROR
 
 # --- System / OS ---
 .DS_Store

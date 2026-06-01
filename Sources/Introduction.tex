@@ -14,10 +14,146 @@
   $ \Tn{X}(\miwc) $, dove $ (\miwc) \in \mdom$.
 \end{definition}
 
+
+\todo{ADD: Esempi di tensori}
+
+
+
+\begin{definition}
+  Date due matrici $ A \in \R^{m_1 \times m_2} $ e $ B \in \R^{m_2 \times n_2} $, il loro prodotto
+  di Kroneker è la matrice 
+  \[
+  C = A \krn B = 
+  \begin{bmatrix} 
+    a_{11}B & a_{12}B & \ldots & a_{1n}B \\ 
+    a_{21}B & a_{22}B & \ldots & a_{2n}B \\ 
+    \vdots & \vdots & \ddots & \vdots \\ 
+    a_{m1}B & a_{m2}B & \ldots & a_{mn}B \\ 
+  \end{bmatrix}  \in  \R^{m_1m_2 \times n_1n_2}, \text{dove } c_{kl} = a_{i_1,j_1}b_{i_2j_2},
+  .\] 
+  dove $ k = (i_1-1)m_2+i_2 $ e $ l = (j_1-1)n_2 + j_2 $
+  \todo{riscrivere con L*}
+  
+\end{definition}
+
+\begin{definition}[Tensor slice]
+  Dato $ \Tn{x} \in \Rmsiz $ chiamiamo slice (o fetta) di $ \Tn{x} $ ogni matrice ottenuta da $
+  \Tn{x} $ fissando tutti gli indici tranne due. Le slices ottenute fissando gli ultimi $ d-2 $ indici sono dette frontal slices.
+\end{definition}
+
+\begin{definition}[Ordinamento naturale]
+  L'ordinamento naturale (natural ordering) su $ \mdom! $ è la mappa biunivoca
+\begin{equation*}
+  \begin{aligned}
+    \L \colon \mdom! &\to [\prod_{j=1}^d n_j]\\
+    (\miwc) &\mapsto 1 + s_1 (i_1-1) + \ldots + s_d(i_d-1) = 1 + \sum_{j=1}^d s_j(i_j - 1),
+  \end{aligned}
+\end{equation*}
+dove $ s_j = n_1 \cdots n_{j-1} = \prod_{h=1}^{j-1}n_h $ è detto passo $ j- $esimo.
+L'inversa di $ \L $ è data dalla mappa
+\begin{equation*}
+  \begin{aligned}
+    \L^{-1} \colon [\prod_{j=1}^d n_j] &\to \mdom!\\
+    l &\mapsto \left(1 + \left\lfloor \frac{ (l-1)\mod(n_1s_1)}{s_1}\right\rfloor, \ldots, 1 +
+    \left\lfloor \frac{ (l-1)\mod(n_ds_d)}{s_d} \right\rfloor \right)
+  \end{aligned}
+\end{equation*}
+\end{definition}
+\begin{remark}
+  La mappa $ \L $ ha come inversa $ \L^{-1} $, sono anche chiamate linearizzazione e tensorizzazione
+  degli indici, rispettivamente, in quanto permettono di passare da uni indice tensoriale a uno
+  lineare, e viceversa.
+\end{remark}
+\begin{proof}
+Segue direttamente dalla definizione di $ \L $ e dalle proprietà del modulo, infatti,
+\[
+\begin{aligned}
+  \L^{-1}(\L(\miwc)) &= \L^{-1}(1 + s_1(i_1-1)) + \ldots + s_d(i_d-1)) \\
+                     &= \left( 1+ \left\lfloor \frac{\sum_{i=1}^d s_j(i_j-1) \mod(n_1s_1)}{s_1}
+                     \right\rfloor, \ldots,   1+ \left\lfloor \frac{\sum_{i=1}^d s_j(i_j-1)
+                   \mod(n_ds_d)}{s_d} \right\rfloor \right)\\
+                     &= \left( 1+ \left\lfloor \sum_{i=1}^d \frac{s_j}{s_1}(i_j-1) \mod(n_1s_1)
+                     \right\rfloor, \ldots,   1+ \left\lfloor \sum_{i=1}^d \frac{s_j}{s_d}(i_j-1)
+                   \mod(n_ds_d) \right\rfloor \right)\\
+                     &= \left( \miwc \right),
+\end{aligned}
+\]
+dove nell'ultimo passaggio abbiamo usato che $ s_j = \prod_{k=1}^d n_k$ e il fatto che $
+\left\lfloor x \right\rfloor = 0 $ per $ x \in [0,1) $.
+Viceversa,
+\[
+\begin{aligned}
+  \L(\L^{-1}(l)) &= \L\left(1 + \left\lfloor \frac{ (l-1)\mod(n_1s_1)}{s_1}\right\rfloor, \ldots, 1 +
+    \left\lfloor \frac{ (l-1)\mod(n_ds_d)}{s_d} \right\rfloor\right) = \\
+                 &=1 + s_1\left(\left\lfloor \frac{(l-1) \mod(n_1s_1)}{s_1} \right\rfloor \right) + \ldots +
+                 s_d\left(\left\lfloor \frac{(l-1) \mod(n_ds_d)}{s_d} \right\rfloor\right)
+\end{aligned}
+\] 
+\todo{missing end}
+\end{proof}
+
 Analogamente alle matrici, i tensori vengono salvati in memoria come vettori, risulta quindi
 naturale definire la seguente oprazione
 \begin{definition}
   Dato un tensore $ \Tn{X}$, possiamo definire l'operazione che trasforma un tensore in vettore,
   tramite la mappa di vettorizzazione 
-  $  \vec : \Rmsiz \to \R^{\prod_{j=1}^d n_j}$, dove $ x_l = \Tn{X}(\L^{-1}(l;\miwc)) $.
+\begin{equation*}
+\begin{aligned}
+  \vec \colon \Rmsiz &\to \R^{\prod_{j=1}^d n_j}\\
+  \Tn{x} &\mapsto x\\
+  \tikz[baseline=1ex, scale=0.4]{
+    % Front face
+    \draw (0,0) rectangle (1,1);
+    % Top face
+    \draw (0,1) -- (0.3,1.3) -- (1.3,1.3) -- (1,1);
+    % Right face
+    \draw (1.3,1.3) -- (1.3,0.3) -- (1,0);
+  } 
+  &\mapsto 
+  \tikz[baseline=-1ex, scale=0.4]{
+    % Tall rectangle
+    \draw (0,-1.5) rectangle (0.3, 1.5);
+  }
+\end{aligned}
+\end{equation*}
+ dove $ x_l = \Tn{X}(\L^{-1}(l;\miwc[n])) $.
 \end{definition}
+
+\begin{proposition}
+  Siano $ \Mx{A} \in \K^{m \times n} $, $ \Mx{B} \in \K^{m \times n}$ ed $ \Mx{X} \in \K^{n \times m}$. Allora
+  \begin{equation*}
+    \vec({\Mx{A}\Mx{X}\Mx{B}}) = (B^{\top} \krn A)\vec(X)
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  Scrivendo $ B = [b_1, \ldots, b_n] $ ed $ X = [x_1, \ldots, x_n] $, la $ k- $esima colonna di $
+  AXB $ è 
+  \begin{equation*}
+    \begin{aligned}
+      (AXB)_{:,k} &= AXb_k = A \sum_{i=1}^m x_i b_{i,k} = \left[ b_{1,k}A ,\ldots, b_{n,k}A \right]
+      \begin{bmatrix} x_1 \\ \vdots \\ x_m \end{bmatrix} = ([b_{1,k}, \ldots, b_{m,k}] \krn A)
+      \vec(X).
+    \end{aligned}
+  \end{equation*}
+  Impilando insieme le colonne otteniamo che
+  \begin{equation*}
+  \vec(AXB) = \begin{bmatrix} (AXB)_{:,1} \\(AXB)_{:,2}\\ \vdots \\ (AXB)_{:,n} \end{bmatrix} =
+  \begin{bmatrix} b_1^{\top} \krn A \\ b_2^{\top} \krn A \\ \vdots \\ b_n^{\top} \krn A
+  \end{bmatrix} \vec(X) = (B^{\top} \krn A)\vec(X).
+  \end{equation*}
+\end{proof}
+
+\begin{proposition}
+  Siano $ \Mx{A} \in \R^{m \times p} $ e $ \Mx{B} \in \R^{n \times q} $. Allora, 
+  \[
+  \Mx{A} \krn \Mx{B} = \Mx{P}(\Mx{B} \krn \Mx{A})\Mx{Q}^{\top},
+  .\] 
+  dove $ \Mx{P} $ e $ \Mx{Q} $ sono matrici di permutazione $ (m,n)- $ e $ (p,q)- $ perfect shuffle, rispettivamente.
+\end{proposition}
+\begin{proof}
+\todo{Potremmo riadattare: THE VEC-PERMUTATION MATRIX, THE VEC OPERATOR AND KRONECKER PRODUCTS: A REVIEW}
+
+\end{proof}
+
+\section{La fattorizzazione CP}
+\subsection{Formulare il prodotto di matrici con la CP}
