@@ -177,6 +177,14 @@
 \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
 \renewcommand{\right}{\aftergroup\egroup\originalright}
 
+\usepackage{mathtools}
+
+% Define a custom command for parentheses
+\DeclarePairedDelimiter{\p}{(}{)}
+% You can also do this for brackets and braces:
+\DeclarePairedDelimiter{\br}{[}{]}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+
 \DeclareMathOperator*{\argmin}          {arg\,min}
 \DeclareMathOperator {\dist}            {dist}
 \DeclareMathOperator {\im}              {im}
