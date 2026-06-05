@@ -36,7 +36,7 @@
   \end{bmatrix}  \in  \R^{m_1m_2 \times n_1n_2}, \text{dove } c_{kl} = a_{i_1,j_1}b_{i_2j_2},
   .\] 
   dove $ k = (i_1-1)m_2+i_2 $ e $ l = (j_1-1)n_2 + j_2 $
-  \todo{riscrivere con L*}
+  \todo{riscrivere con L*. Vedi definizione nelle note}
   
 \end{definition}
 
@@ -83,7 +83,7 @@ Segue direttamente dalla definizione di $ \L $ e dalle proprietà del modulo, in
 \end{aligned}
 \]
 dove nell'ultimo passaggio abbiamo usato che $ s_j = \prod_{k=1}^d n_k$ e il fatto che $
-\left\lfloor x \right\rfloor = 0 $ per $ x \in [0,1) $.
+\left\lfloor x \right\rfloor = 0 $ per ogni $ x \in [0,1) $.
 Viceversa,
 \[
 \begin{aligned}
@@ -149,6 +149,90 @@ naturale definire la seguente oprazione
  dove $ x_l = \Tn{X}(\L^{-1}(l;\miwc[n])) $.
 \end{definition}
 
+In molte situazioni risulta comodo disporre gli elementi di un tensore in una matrice. Uno dei modi
+per farlo è utilizzare le matricizzazioni, anche dette \emph{unfoldings}.
+
+\begin{definition}[Mode$-k$ unfolding]
+  Il mode$-k$ unfolding di $ \Tn{x} \in \Rmsiz! $ è la matrice $ \Tm{x}{k} \in \R^{n_k \times
+  \prod_{j\neq k}} n_j $ le cui colonne sono mode$ -k $ fibers ordinate seguendo l'ordine naturale
+  su $ \sdom $. In particolare si ha
+  \[
+  \Tn{x}(i,j) = \Tn{x}(\siwc{i}) \text{ con } j = \L(\siwc)
+  .\] 
+\end{definition}
+
+Dal punto di vista computazionale è utile introdurre la seguente operazione
+
+\todo{refrasare un poco per renderla più leggibile}
+\begin{definition}[Reshape]
+  Definiamo l'operatore di \emph{reshape} come quello che cambia le dimensioni di un array
+  multidimensionale, senza alterarne le dimensioni e mantenendo l'ordine delle entrate. Formalmente,
+  fissati $ d, d' \in \N$ e un tensore $ \Tn{x} \in \Rmsiz! $, per ogni $ m_1, \ldots, m_{d'} $ tali
+  che $ \prod_{i=1}^{d'} m_j = \prod_{j = 1}^{d} n_j$, il tensore $ \Tn{y} = \reshape(\Tn{x},
+  \msiz![m][d']) \in \Rmsiz![m][d'] $ è definito come
+  \[
+  \Tn{y}(i_1, \ldots, i_{d'})= \Tn{x}(j_1, \ldots, j_d) 
+,\] 
+ per ogni $(i_1, \ldots, i_{d'}),(j_1, \ldots,
+  j_d) $ tali che $ \L(i_1, \ldots, i_{d'}; \msiz![m][d'])) = \L(j_1, \ldots,
+  j_d, \msiz!)$.
+\end{definition}
+
+\begin{remark}
+  L'insieme dei tensori $ \R^{\msiz!} $ forma un $ \R- $spazio vettoriale con prodotto scalare euclideo con le operazioni
+  \begin{itemize}
+    \item Addizione: $(\Tn{x}_1 + \Tn{x}_2)(\miwc!) = \Tn{x}_1(\miwc!) + \Tn{x}_2(\miwc!)$.
+    \item Moltiplicazione per scalare: Per ogni $ \alpha \in \R, \alpha (\Tn{x}(\miwc!)) = (\alpha
+      \Tn{x})(\miwc!)$
+    \item Prodotto scalare: $ \angb{\Tn{x}_1, \Tn{x}_2} = \vec(\Tn{x}_1)^{\top} \vec(\Tn{x}_2)$
+    \item Norma: $\| \vec(\Tn{x})\|$
+  \end{itemize}
+\end{remark}
+
+\begin{definition}[Prodotto esterno]
+  Dati dei vettori $ v^{(1)} \in \R^{n_1}, \ldots, v^{(d)} \in \R^{n_d} $, loro prodotto esterno, anche detto prodotto tensore, è il tensore
+  \[
+  \Tn{x} = v^{(1)} \topp v^{(2)} \topp \cdots \topp v^{(d)} \in \Rmsiz
+  ,\] 
+   tale che la sua scrittura in componenti è
+     \[
+      \Tn{x}(\miwc) = v_{i_1}^{(1)}v_{i_2}^{(2)} \cdots v_{i_d}^{(d)} = \prod_{j=1}^d v_{i_j}^{(j)}
+     .\] 
+\end{definition}
+
+\begin{lemma}[Legame tra il prodotto esterno e il prodotto di Kroneker]
+  Dato un tensore $ \Tn{x} = v^{(1)} \topp \cdots v^{(d)} $, allora
+  \begin{enumerate}[label=(\roman*)]
+    \item $\vec(\Tn{x}) = v^{(d)} \krn \cdots \krn v^{(1)}$
+  \item $ \Tm{x}{k} = v^{(k)}\left( v^{(d)} \krn \cdots \krn v^{(k-1)} \krn v^{(k+1)} \krn \cdots
+    \krn v^{(1)} \right)^{\top}$
+  \item $\Tm{x}{\mathcal{R} \times \mathcal{C}} = (v^{(r_\delta)} \krn \cdots \krn
+    v^{(r_1)})(v^{(c_{d-\delta})} \krn \cdots \krn v^{(c_1)})^{\top}$, dove $\mathcal{R} =\left\{ r_1, \ldots,
+    r_\delta \right\} $ e $ \mathcal{C} = \left\{ c_1, \ldots, c_{d-\delta}
+  \right\} $.
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+\todo{Dimostrare}
+\end{proof}
+
+\begin{remark}
+  Tutte le matricizzazioni di un prodotto esterno hanno rango 1.
+\end{remark}
+
+In molte situazioni è utile moltiplicare un tensore con una matrice, ma purtroppo le dimensioni non
+combaciano. La seguente definizione risolve
+il problema facendo agire la matrice la matrice lungo il modo $ k- $esimo di un tensore, e si
+chiama.
+\begin{definition}[Prodotto nel modo $k$]
+  Il \emph{prodotto nel modo $ k $} di un tensore $ \Tn{x} \in \Rmsiz! $ con una matrice $ U \in
+  \R^{r \times n_k} $ è un tensore 
+\[
+  \Tn{y} = \Tn{x} \ttm U \in \R^{\ssiz{r}} \text{ con } \Tm{Y}{k} = U \Tm{X}{k}
+.\] 
+In componenti, $ \Tn{y}(\siwc{\alpha}) = \sum_{i_k = 1}^d \Tn{X}(\miwc) U_{\alpha, i_k} $.
+\end{definition}
+
 \begin{proposition}
   Siano $ \Mx{A} \in \K^{m \times n} $, $ \Mx{B} \in \K^{m \times n}$ ed $ \Mx{X} \in \K^{n \times m}$. Allora
   \begin{equation*}
@@ -202,6 +286,20 @@ naturale definire la seguente oprazione
   In tal caso, scriviamo $ \Tn{x} = \dsqr{U_1, \ldots, U_d} $.
 \end{definition}
 
+\subsection{Rango CP}
+
+\begin{proposition}
+  Sia $ \Tn{x} \in \Rmsiz! $ un tensore che ammette fattorizzazione $ \Tn{x} = \dsqr{U_1, \ldots,
+  U_d} $, e sia $ r_j = \rk(X_{(j)}) $ il rango dell'unfolding $ X_{(j)}, $ con $ j = 1, \ldots, d $. Allora vale che
+  \begin{equation}
+    \max_{j=1, \ldots, d}(r_j) \le \rk(\Tn{x}) \le \min_{j=1, \ldots, d}\left( \prod_{i \neq j}r_i \right)
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  La minorazione segue direttamente dalla scrittura delle
+  
+\end{proof}
+
 \subsection{Il problema del border rank}
 
 \begin{example}
@@ -233,8 +331,17 @@ naturale definire la seguente oprazione
     \end{aligned}
   \end{equation}
   Quindi $ \Tn{y}_\varepsilon - \Tn{x} \to 0 $.
-  
 \end{example}
+
+Questo motiva la seguente definizione:
+
+\begin{definition}[Border rank]
+  Dato un tensore $ \Tn{x} \in \Rmsiz $, il suo border rank è la quantità
+  \[
+  \brk(\Tn{x}) = \min \left\{ r \in \N \mid \exists \Tn{y} \in \Rmsiz! \text{ t.c }
+  \rk(\Tn{y})=r, \, \|\Tn{x} - \Tn{y}\|  < \varepsilon \right\}
+  .\] 
+\end{definition}
 
 \subsection{Operazioni nel formato CP}
   
