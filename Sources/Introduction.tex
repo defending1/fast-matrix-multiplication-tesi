@@ -23,8 +23,8 @@
 
 
 
-\begin{definition}
-  Date due matrici $ A \in \R^{m_1 \times m_2} $ e $ B \in \R^{m_2 \times n_2} $, il loro prodotto
+\begin{definition}[Prodotto di Kroneker]
+  Date due matrici $ A \in \R^{m \times n} $ e $ B \in \R^{p \times q} $, il loro prodotto
   di Kroneker è la matrice 
   \[
   C = A \krn B = 
@@ -33,9 +33,9 @@
     a_{21}B & a_{22}B & \ldots & a_{2n}B \\ 
     \vdots & \vdots & \ddots & \vdots \\ 
     a_{m1}B & a_{m2}B & \ldots & a_{mn}B \\ 
-  \end{bmatrix}  \in  \R^{m_1m_2 \times n_1n_2}, \text{dove } c_{kl} = a_{i_1,j_1}b_{i_2j_2},
+  \end{bmatrix}  \in  \R^{mp \times nq}, \text{dove } c_{kl} = a_{ij}b_{nl},
   .\] 
-  dove $ k = (i_1-1)m_2+i_2 $ e $ l = (j_1-1)n_2 + j_2 $
+  dove $ \alpha = \L^*(i,k) = \L(k,i) $ e $ \beta = \L^*(j,l) = \L(l,j) $
   \todo{riscrivere con L*. Vedi definizione nelle note}
   
 \end{definition}
@@ -153,11 +153,11 @@ In molte situazioni risulta comodo disporre gli elementi di un tensore in una ma
 per farlo è utilizzare le matricizzazioni, anche dette \emph{unfoldings}.
 
 \begin{definition}[Mode$-k$ unfolding]
-  Il mode$-k$ unfolding di $ \Tn{x} \in \Rmsiz! $ è la matrice $ \Tm{x}{k} \in \R^{n_k \times
-  \prod_{j\neq k}} n_j $ le cui colonne sono mode$ -k $ fibers ordinate seguendo l'ordine naturale
+  Il \emph{mode$-k$ unfolding} di un tensore $ \Tn{x} \in \Rmsiz! $ è la matrice $ \Tm{x}{k} \in \R^{n_k \times
+  \prod_{j\neq k}n_j} $ le cui colonne sono mode$ -k $ fibers ordinate seguendo l'ordine naturale
   su $ \sdom $. In particolare si ha
   \[
-  \Tn{x}(i,j) = \Tn{x}(\siwc{i}) \text{ con } j = \L(\siwc)
+  \Tn{x}(i,j) = \Tn{x}(\siwc{i}) \text{, con } j = \L(\siwc)
   .\] 
 \end{definition}
 
@@ -175,11 +175,12 @@ Dal punto di vista computazionale è utile introdurre la seguente operazione
 ,\] 
  per ogni $(i_1, \ldots, i_{d'}),(j_1, \ldots,
   j_d) $ tali che $ \L(i_1, \ldots, i_{d'}; \msiz![m][d'])) = \L(j_1, \ldots,
-  j_d, \msiz!)$.
+  j_d; \msiz!)$.
 \end{definition}
 
 \begin{remark}
-  L'insieme dei tensori $ \R^{\msiz!} $ forma un $ \R- $spazio vettoriale con prodotto scalare euclideo con le operazioni
+  L'insieme dei tensori $ \R^{\msiz!} $ forma un $ \R- $spazio vettoriale, dotato del prodotto
+  scalare euclideo, con le operazioni
   \begin{itemize}
     \item Addizione: $(\Tn{x}_1 + \Tn{x}_2)(\miwc!) = \Tn{x}_1(\miwc!) + \Tn{x}_2(\miwc!)$.
     \item Moltiplicazione per scalare: Per ogni $ \alpha \in \R, \alpha (\Tn{x}(\miwc!)) = (\alpha
@@ -233,12 +234,12 @@ chiama.
 In componenti, $ \Tn{y}(\siwc{\alpha}) = \sum_{i_k = 1}^d \Tn{X}(\miwc) U_{\alpha, i_k} $.
 \end{definition}
 
-\begin{proposition}
+\begin{lemma}
   Siano $ \Mx{A} \in \K^{m \times n} $, $ \Mx{B} \in \K^{m \times n}$ ed $ \Mx{X} \in \K^{n \times m}$. Allora
   \begin{equation*}
     \vec({\Mx{A}\Mx{X}\Mx{B}}) = (B^{\top} \krn A)\vec(X)
   \end{equation*}
-\end{proposition}
+\end{lemma}
 \begin{proof}
   Scrivendo $ B = [b_1, \ldots, b_n] $ ed $ X = [x_1, \ldots, x_n] $, la $ k- $esima colonna di $
   AXB $ è 
@@ -258,6 +259,25 @@ In componenti, $ \Tn{y}(\siwc{\alpha}) = \sum_{i_k = 1}^d \Tn{X}(\miwc) U_{\alph
 \end{proof}
 
 \begin{proposition}
+  Dato un tensore $ \Tn{x} \in \Rmsiz* $ e delle matrici $ U \in \R^{m_1 \times n_1} $, $ V \in
+  \R^{m_1 \times n_2} $ e $ W \in \R^{m_3 \times n_3} $. Sono fatti equivalenti:
+  \begin{enumerate}[label=(\roman*)]
+    \item $\Tn{y} = \Tn{x} \ttm[1] U \ttm[2] V \ttm[3] W \in \Rmsiz*[m]$.
+    \item $\vec(\Tn{y}) = (W \krn V \krn U) \cdot \vec(\Tn{x})$.
+    \item $\Tm{Y}{1} = U\Tm{X}{1}(W \krn V)^{\top}$.
+    \item $ \Tm{Y}{2} = V\Tm{X}{2}(W \krn U)^{\top} $.
+    \item $\Tm{Y}{3} = W\Tm{X}{3}(V \krn U)^{\top}$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{description}
+        \item[$(1) \iff (2)$] Mostriamo che $\vec(\Tn{x} \ttm[1] U) = (I \krn I \krn U)
+          \vec(\Tn{x})$.
+        \item[$(2) \iff (4)$] Conversely, assume statement 2 holds. Thus...
+    \end{description}
+\end{proof}
+
+\begin{proposition}
   Siano $ \Mx{A} \in \R^{m \times p} $ e $ \Mx{B} \in \R^{n \times q} $. Allora, 
   \[
   \Mx{A} \krn \Mx{B} = \Mx{P}(\Mx{B} \krn \Mx{A})\Mx{Q}^{\top},
@@ -272,9 +292,10 @@ In componenti, $ \Tn{y}(\siwc{\alpha}) = \sum_{i_k = 1}^d \Tn{X}(\miwc) U_{\alph
 \section{La fattorizzazione CP}
 \todo{Short introduzione che leghi caso matriciale con tensoriale.}
 \begin{definition}[Canonical Polyadic Decomposition (CP)]
+\label{def:CP}
   Diciamo che un tensore $ \Tn{x} \in \Rmsiz $ ammette una decomposizione CP di rango $ r\in \N $ se
-  esistono delle matrici $ U_1, \ldots, U_d $ tali che $ U_h = \left[ u_1^{(h)}, \ldots, u_r^{(h)}\right]\in R^{n_h \times r} $ tali per cui
-  valgono le seguenti tre condizioni equivalenti:
+  esistono delle matrici $ U_1, \ldots, U_d $ tali che $ U_h = \left[ u_1^{(h)} \mid \ldots \mid u_r^{(h)}\right]\in R^{n_h \times r} $ tali per cui
+  valgono le seguenti condizioni equivalenti:
   \begin{enumerate}[label=(\roman*)]
     \item $ \Tn{x} = \sum_{j=1}^r u_j^{(1)} \topp \ldots \topp u_j^{(d)} = \sum_{i=1}^r
       \bigtopp_{h=1}^d u_j^{(h)}$.
@@ -285,6 +306,38 @@ In componenti, $ \Tn{y}(\siwc{\alpha}) = \sum_{i_k = 1}^d \Tn{X}(\miwc) U_{\alph
   \end{enumerate}
   In tal caso, scriviamo $ \Tn{x} = \dsqr{U_1, \ldots, U_d} $.
 \end{definition}
+
+
+
+\begin{definition}
+Il \emph{rango CP} di un tensore $ \Tn{x} $ è il minimo intero $ r \in \Z_{\ge 0} $ tale per cui $
+\Tn{x} $ ammette una decomposizione CP di rango $ r $, e lo denotiamo con $ \rk(\Tn{x}) = r$.
+\end{definition}
+
+\begin{remark}[Risparmio in memoria della CP]
+  La fattorizzazione CP di un tensore $ \Tn{x} $ di rango $ r $ permette di ridurre notevolmente il
+  costo di memorizzazione del tensore, in quanto richiede $ O((n_1 + \ldots + n_d)r) \ll
+  O(\prod_{i=1}^d n_j)$.
+\end{remark}
+
+\todo{Esempio polinomio semisep + altro es}
+
+\begin{definition}[Prodotto Khatri-Rao]
+  Date due matrici $ A \in \R^{m \times r} $ e $ B \in \R^{n \times r} $, il loro \emph{prodotto
+  Khatri-Rao} è dato da
+  \begin{equation}
+    C = A \krp B = \left[ a_1 \krn b_1 \mid \ldots \mid a_r \krn b_r \right] \in \R^{(mn) \times r},
+  \end{equation}
+  dove $ a_j $ e $ b_j $ indicano la $ j-$esima colonna di $ A $ e $ B $, rispettivamente, e la matrice $ C $
+  si lascia scrivere in componenti come $ C_{k,l} = A_{i,l}B_{j,l} $, dove $ \L^*(i,j) = \L(j,i) = k $.
+\end{definition}
+
+\begin{remark}
+  Calcolare il prodotto di Khatri-Rao di due matrici $ A \in \R^{m \times r} $ e $ B \in \R^{n \times
+  r} $ ha un costo in memoria di $ O(mn
+  \cdot r) $.
+\end{remark}
+
 
 \subsection{Rango CP}
 
@@ -362,4 +415,138 @@ Questo motiva la seguente definizione:
   \end{equation*}
 \end{proof}
 
-\subsection{Formulare il prodotto di matrici con la CP}
+\subsection{Costruzione del tensore in formato denso}
+
+\subsection{Unicità della fattorizzazione CP}
+
+\begin{definition}[Essenziale unicità CP]
+  Una fattorizzazione CP di rango $ r $ di un tensore $ \Tn{x} \dsqr{U_1, \ldots, U_d}$ è
+  \emph{essenzialmente unica} se, per ogni altra fattorizzazione $ \Tn{x} = \dsqr{\tilde{U}_1,
+  \ldots, \tilde{U}_d}$ di rango $ r $, esiste una patrice di permutazione $ P \in \R^{r \times r} $
+  e delle matrici diagonali $ D_1, \ldots, D_d \in \R^{r \times r} $ che soddisfano $ D_1 D_2 \cdots D_d =
+  I$ e $U_j = \tilde{U_j}D_jP$, per ogni $ j = 1, \ldots, d $.
+\end{definition}
+
+\begin{definition}[$ k- $rango]
+  Data $ A \in \R^{m\times n} $, il suo \emph{$ k- $rango} è il massimo $ k \in \N $ tale che ogni
+  scelta di $ k $ colonne in $ A $ comprende colonne linearmente indipendenti. Lo denoteremo con il
+  simbolo $ \krk(A) $.
+\end{definition}
+\begin{remark}
+  Dalla definizione segue che $ \krk(A) \le \rk(A) $ per ogni matrice $ A \in \R^{m \times n} $. In
+  particolare, se $ A $ è full-rank, $ \krk(A) = \rk(A) $; se invece $ A $ ha due colonne linearmente
+  dipendenti, $ \krk(A) \le 1 $.
+\end{remark}
+
+\begin{theorem}[Kruskal 3D, Sidiropoulos e Bro]
+  Una fattorizzazione CP di un tensore $ \Tn{X} = \dsqr{U_1, \ldots, U_d}$ di rango $ r $ è essenzialmente unica se
+  \begin{equation*}
+    \sum_{j=1}^d \krk(U_j) \ge 2r + d -1.
+  \end{equation*}
+\end{theorem}
+
+La condizione di Kruskal è sufficiente ma non necessaria. Il seguente risultato fornisce una
+condizione necessaria ma non sufficiente:
+
+\begin{theorem}
+  Dato un tensore $ \Tn{x} = \dsqr{U_1, \ldots, U_d}$ tale per cui $ \min_j \left\{ \rk(U_d \krp
+  \cdots \krp U_{j+1} \krp U_{j-1} \krp \cdots \krp U_1) \right\} < r$, allora la fattorizzazine $ \Tn{x} =
+  \dsqr{U_1, \ldots, U_d} $ non è essenzialmente unica.
+\end{theorem}
+
+\subsection{Calcolo della fattorizzazione CP}
+
+Trattiamo il problema di trovare la migliore approssimazione con rango CP $ r $ di un dato tensore.
+Studiamo il caso $ d = 3 $.
+Dato $ \Tn{x} \in \R ^ {m \times n \times p} $ cerchiamo una fattorizzazione $ \dsqr{A, B, C} $ con
+$ A \in \R^{m \times r}, B \in \R^{n\times r} $ e $ C \in \R^{p \times r} $ cercando di risolvere il
+problema ai minimi quadrati
+\begin{equation}
+  \min_{A,B,C}\| \Tn{x} - \dsqr{A,B,C}\|^2.
+\end{equation}
+Tale problema puoò essere mal posto per quanto detto sul border rank. Inoltre si tratta di un
+problema non convesso (esistono molti minimi locali \todo{why?}) e dato che ogni tensore ha
+rappresentazioni CP multiple.
+
+\subsubsection{Alternating least-squares}
+
+Considero 
+\[
+\| \Tn{x} - \dsqr{A,B,C}\|^2 = \| \Tm{X}{1} - A(C \krp B)^{\top}\|_F^2 = \| (C \krp B)A^{\top} -
+\Tm{X}{1}^{\top}\|_F^2
+,\] 
+ovvero un problema lineare ai minimi quadrati dove l'incognita è una matrice $ A $.
+La soluzione può essere espressa \todo{why?} in termini delle equazioni normali
+\[
+  (C \krp B)^{\top}(C \krp B)A^T = (C \krp B)^{\top}\Tm{x}{1}^{\top}
+,\] 
+se e solo se, usando il lemma \todo{lemma KRP HADamard}
+\[
+  (C^{\top}C \had B^{\top}B)A^{\top} = (C \krp B)^{\top}\Tm{X}{1}^{\top}
+.\] 
+La matrice $ Z = \R^{r\times r} $ è semidefinita positiva, e quando è positiva definita (accade se
+$ C \krp B $ è full-rank possiamo risolvere con la fattorizzazione di Cholesky il sistema)
+\begin{equation}
+  AZ = \Tm{x}{1}(C\krp B)= M
+\end{equation}
+\todo{vEdi fogli per calcolo costo}
+
+
+\section{Applicazioni della CP}
+
+Conoscere il rango CP di tensori che rappresentano applicazioni multilineari può rivelare
+informazioni sulla complessità asintotica e fornire algoritmi con complessità ottimale per la loro
+valutazione. Proviamo a formulare il problema: dall'algebra lineare sappiamo che data una forma
+bilineare $ b : \R^m \times \R^n \to \R $, esiste una matrice $ M \in \R^{m \times n} $ tale che $
+b(u,v) = u^{\top}Mv$ per ogni $ (u,v) \in \R^m \times \R^n $.
+Notiamo che un insieme di $ p $ forme bilineari, o equivalentemente una funzione \todo{È chiaro se
+si chiama ancora b?}bilineare $
+b = \begin{bmatrix} b_1 \\ \vdots \\ b_p \end{bmatrix} :  \R^m \times \R^n  \to \R^p$ si può
+rappresentare tramite un tensore $ \Tn{x} \in \R^{m \times n\times p} $ tale che le sue slice
+frontali rappresentino ognuna delle $ p $ forme bilineari, ossia che
+\begin{equation}
+  \label{eq:b_k_bil}
+  b_k(u,v) = u^{\top}\Tn{x}(:,:,k)v = \sum_{i=1}^m\sum_{j=1}^n \Tn{x}(i,j,k)u_iv_j, \text{ per ogni
+  } k = 1, \ldots, p
+.\end{equation}
+Da cui, 
+\begin{equation}
+  \label{eq:b_tuv}
+ b(u,v) = \begin{bmatrix} b_1(u,v) \\ \vdots \\ b_p(u,v) \end{bmatrix} = \Tn{x} \ttm[1] u^{\top}
+ \ttm[2] v^{\top}.
+\end{equation}
+\begin{remark}
+  Questa procedura si estende anche al caso in cui le entrate di $ u $ e $ v $ siano oggetti
+  algebrici più complessi di scalari, ad esempio vettori o matrici.
+\end{remark}
+\begin{remark}[Active multiplications]
+  Scrivere una forma bilineare come nell'Equazione \ref{eq:b_k_bil} evidenzia il numero di
+  moltiplicazioni necessarie fra gli elementi di $ u $ e $ v $. Queste sono dette \emph{active
+  multiplications} e corrispondono al numero di elementi non nulli di $ \Tn{x} $. Poiché ci aspettiamo che
+  il costo delle active multiplications sia quello che determini la complessità di valutare $ b(u,v)
+  $, cerchiamo di minimizzarne il numero cercando fattorizzazioni CP di $ \Tn{x} $.
+\end{remark}
+Se abbiamo $ \Tn{x} = \dsqr{A,B,C} $ con $ \rk(\Tn{x}) = r$, dalla Definizione~\ref{def:CP} abbiamo che $ \Tn{x} = \sum_{l=1}^r a_l \topp b_l \topp c_l $, o in componenti, $ \Tn{x}(i,j,k) = \sum_{l=1}^r a_{il}b_{jl}c_{kl} $. Inserendo questa relazione nella Equazione~\ref{eq:b_k_bil} troviamo,
+
+\begin{equation}
+  \label{eq:b_active}
+  \begin{aligned}
+    b_k(u,v) &= \left( \left( \sum_{i=1}^r a_l \topp b_l \topp c_l \right) \ttm[1] u^{\top} \ttm[2]
+  v^{\top}  \right)_k  
+             = \left( \sum_{l=1}^r \left( a_l \topp b_l \topp c_l  \right) \ttm[1] u^{\top} \ttm[2]
+    v^{\top} \right)_k  \\ 
+             &=
+  \sum_{i=1}^m \sum_{j=1}^n \sum_{l=1}^r a_{il}b_{jl}c_{kl} u_i v_j = \sum_{l=1}^r \left(\sum_{i=1}^m 
+   a_{il} u_i \right) \cdot \left( \sum_{j=1}^n b_{jl} v_j  \right)  c_{kl} = \sum_{l=1}^r
+   (a_l^{\top}u) \cdot (b_l^{\top}v)c_{kl},
+  \end{aligned}
+\end{equation}
+per ogni $ k = 1, \ldots, p $.
+Mettendo insieme le Equazioni \ref{eq:b_tuv} e \ref{eq:b_active} troviamo
+\begin{equation*}
+  b(u,v) = \sum_{l=1}^r (a_l^{\top}u)\cdot(b_l^{\top}v)c_l.
+\end{equation*}
+
+Quindi valutare $ b $ richiede esattamente $ r $ active multiplications, che evidenziamo con $
+(\cdot) $.
+\todo{Espandere discussione dall'articolo}

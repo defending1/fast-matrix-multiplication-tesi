@@ -1,0 +1,7 @@
+[doc]
+name = "Thesis"
+
+[[output]]
+name = "Thesis"
+type = "pdf"
+inputs = ["Thesis.tex"]
