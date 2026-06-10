@@ -59,6 +59,7 @@
 % Graphics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{tikz}
 \RequirePackage{graphicx}
 \graphicspath{%
   {Figures/}
@@ -167,6 +168,8 @@
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
 \RequirePackage{dsfont}
+\usepackage[normalem]{ulem} % Provides clean underlining
+\usepackage{environ}        % Allows advanced environment control
 
 % Fix the spacing of \left and \right. Use these with the proper bracket
 % in order to ensure that they scale automatically.

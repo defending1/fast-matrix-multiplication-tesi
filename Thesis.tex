@@ -179,7 +179,11 @@
 \newtheorem{example}[theorem]{Esempio}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Osservazione}
-
+\NewEnviron{notation}{%
+  \par\vspace{1ex}       % Small space before the environment
+  \noindent\uline{\textit{Notazione:}} \BODY
+  \par\vspace{1ex}       % Small space after the environment
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -200,27 +204,7 @@
 
 \mainmatter
 
-  \part[A good part]{%
-    A good part\\
-    %
-    \vspace{1cm}
-    %
-    \begin{minipage}[l]{\textwidth}
-    %
-    \textnormal{%
-      \normalsize
-      %
-      \begin{singlespace*}
-        \onehalfspacing
-        %
-        You can also use parts in order to partition your great work
-        into larger `chunks'. This involves some manual adjustments in
-        terms of the layout, though.
-      \end{singlespace*}
-    }
-    \end{minipage}
-  }
-
+  \include{Sources/Introduction}
   \include{Sources/Chapter1}
   \include{Sources/Chapter2}
 

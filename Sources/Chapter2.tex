@@ -2,6 +2,9 @@
 \chapter{Applicazioni della CP}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Rappresentare forme bilineari tramite tensori}
+\label{sec:tensor_bil}
+
 Conoscere il rango CP di tensori che rappresentano applicazioni multilineari può rivelare
 informazioni sulla complessità asintotica e fornire algoritmi con complessità ottimale per la loro
 valutazione. Proviamo a formulare il problema: dall'algebra lineare sappiamo che data una forma
@@ -59,7 +62,10 @@ Quindi valutare $ b $ richiede esattamente $ r $ active multiplications, che evi
 (\cdot) $.
 \todo{Espandere discussione dall'articolo}
 
-\section{L'algoritmo di Strassen}
+
+\section{Il master method}
+
+
 
 Introduciamo brevemente un metodo per risolvere relazioni ricorsive definite per ricorrenza, detto
 \emph{master method}. I lettori più interessati possono trovare una trattazione più dettagliata sul
@@ -105,3 +111,69 @@ dove con $ \frac{n}{b} $ indichiamo sia $ \left\lfloor \frac{n}{b} \right\rfloor
   f(n) = O(n^{3-\varepsilon}) $ per $ \varepsilon = 1 $, dal caso 1 di \ref{th:master} segue che $
   T(n) = \Theta(n^3) $.
 \end{example}
+
+
+\section{Moltiplicazione ricorsiva di matrici}
+
+Possiamo rappresentare la moltiplicazione tra matrici come una funzione bilineare, quindi come un
+tensore. 
+
+\begin{lemma}[Rappresentazione del prodotto matriciale]
+Per ogni coppia di matrici $ A \in \R^{m \times n} $ e $ B \in \R^{n
+\times p} $, esiste un tensore $ \Tn{x} \in ? $ tale che il prodotto $ C = AB \in \R^{m \times n} $
+si scrive come $ \Tn{x} \ttm[1] \vec(A) \ttm[2] \vec(B) =
+\vec(C)$.
+\end{lemma}
+\todo{finire}
+\begin{proof}
+  Dalla definizione di prodotto di matrice, $ C_{ij} =  $
+\end{proof}
+
+\todo{Brief motivation}
+
+\begin{notation}
+  Indichiamo con $ \angb{m,n,p} $ il prodotto tra due matrici di taglia $ m \times n $ e $ n \times
+  p $.
+\end{notation}
+
+
+Trattiamo prima il caso di matrici quadrate con taglie potenze di due. Discuteremo di seguito come
+trattare il caso generale. In questo caso possiamo
+partizionare le matrici in delle sottomatrici a blocchi $ 2\times 2 $:
+\begin{equation*}
+  \begin{bmatrix}
+    C_{11} & C_{12} \\
+    C_{21} & C_{22}
+  \end{bmatrix} =
+  \begin{bmatrix}
+    A_{11} & A_{12} \\
+    A_{21} & A_{22}
+  \end{bmatrix} \cdot 
+  \begin{bmatrix}
+    B_{11} & B_{12} \\
+    B_{21} & B_{22}
+  \end{bmatrix} =
+  \begin{bmatrix}
+    A_{11}B_{11} + A_{12}B_{21} & A_{11}B_{12} + A_{12}B_{22} \\
+    A_{21}B_{12} + A_{22}B_{21} & A_{21}B_{12} + A_{22}B_{22}
+  \end{bmatrix}.
+\end{equation*}
+L'algoritmo naive procede combinando un insieme di otto moltiplicazioni matriciali con quattro
+addizioni:
+% Intermediate Matrices
+% Intermediate Matrices
+\[
+\begin{aligned}
+M_1 &= A_{11} \cdot B_{11} &\quad M_2 &= A_{12} \cdot B_{21} &\quad M_3 &= A_{11} \cdot B_{12} \\
+M_4 &= A_{12} \cdot B_{22} &\quad M_5 &= A_{21} \cdot B_{11} &\quad M_6 &= A_{22} \cdot B_{21} \\
+M_7 &= A_{21} \cdot B_{12} &\quad M_8 &= A_{22} \cdot B_{22} & &
+\end{aligned}
+\]
+
+% Resulting Matrices
+\[
+\begin{aligned}
+C_{11} &= M_1 + M_2 &\qquad C_{12} &= M_3 + M_4 \\
+C_{21} &= M_5 + M_6 &\qquad C_{22} &= M_7 + M_8
+\end{aligned}
+\]
